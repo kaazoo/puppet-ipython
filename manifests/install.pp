@@ -2,7 +2,7 @@ class ipython::install {
 
   search Ipython::Functions
 
-  package { ["python${ipython::python_version}", "python${ipython::python_version}-dev", "git-core"]:
+  package { ["python${ipython::python_version}", "python${ipython::python_version}-dev", "git-core", "python-pymongo"]:
     ensure => present,
   }
 
