@@ -42,7 +42,6 @@ class ipython::install {
     }
   } else {
     # clone repository & switch to specific branch
-    if $ipython::git_branch
     exec { "git clone -b ${ipython::git_branch} git://github.com/ipython/ipython.git":
       cwd     => '/root',
       creates => '/root/ipython',
