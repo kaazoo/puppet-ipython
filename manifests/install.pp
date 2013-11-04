@@ -33,7 +33,7 @@ class ipython::install {
 
   # clone repository & checkout tag if specified
   if $ipython::git_tag != '' {
-    exec { "git clone git checkout git://github.com/ipython/ipython.git && cd /root/ipython && git checkout ${ipython::git_tag}":
+    exec { "git clone git://github.com/ipython/ipython.git && cd /root/ipython && git checkout ${ipython::git_tag}":
       cwd     => '/root',
       creates => '/root/ipython',
       path    => ['/bin', '/usr/bin', '/usr/sbin'],
