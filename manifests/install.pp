@@ -1,7 +1,5 @@
 class ipython::install {
 
-  search Ipython::Functions
-
   package { ["python${ipython::python_version}", "python${ipython::python_version}-dev", "git-core", "python-pymongo"]:
     ensure => present,
   }
@@ -31,30 +29,22 @@ class ipython::install {
     }
   }
 
-  # clone repository & checkout tag if specified
-  if $ipython::git_tag != '' {
-    exec { "git clone git://github.com/ipython/ipython.git && cd /root/ipython && git checkout ${ipython::git_tag}":
-      cwd     => '/root',
-      creates => '/root/ipython',
-      path    => ['/bin', '/usr/bin', '/usr/sbin'],
-      require => Package['git-core'],
-      notify  => Exec['ipython-install'],
-    }
-  } else {
-    # clone repository & switch to specific branch
-    exec { "git clone -b ${ipython::git_branch} git://github.com/ipython/ipython.git":
-      cwd     => '/root',
-      creates => '/root/ipython',
-      path    => ['/bin', '/usr/bin', '/usr/sbin'],
-      require => Package['git-core'],
-      notify  => Exec['ipython-install'],
-    }
-  }
+  # run install via pip
+  if $ipython::install_method == 'pip' {
 
-  # install from cloned git repository
-  pysetup_install { "ipython":
-    cwd => "/root/ipython",
-    reqs => Package["python${ipython::python_version}", "python${ipython::python_version}-dev"],
+    package { 'python-pip':
+      ensure => present,
+    }
+
+    include ipython::pip_install
+
+  # run install via git
+  } elsif $ipython::install_method == 'git' {
+
+    include include::git_install
+
+  } else {
+    print('not supported install method')
   }
 
 }
