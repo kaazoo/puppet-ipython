@@ -41,10 +41,10 @@ class ipython::install {
   # run install via git
   } elsif $ipython::install_method == 'git' {
 
-    include include::git_install
+    include ipython::git_install
 
   } else {
-    print('not supported install method')
+    err('unsupported install method')
   }
 
 }
